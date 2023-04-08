@@ -1,7 +1,5 @@
 package ph.edu.mcl.mmdc;
 
-import java.util.Comparator;
-
 public class Stock {
     private Item[] storage = new Item[0];
 
