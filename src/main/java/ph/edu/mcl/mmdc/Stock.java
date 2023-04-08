@@ -21,7 +21,7 @@ public class Stock {
         storage = tempStorage;
     }
 
-    public void remove(int index) {
+    public void remove(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index >= storage.length) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
         }
