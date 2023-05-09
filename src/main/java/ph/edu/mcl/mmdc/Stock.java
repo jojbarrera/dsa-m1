@@ -1,88 +1,96 @@
 package ph.edu.mcl.mmdc;
 
+import java.util.HashMap;
+
 public class Stock {
-    private Item[] storage = new Item[0];
+    private Index[] indexes = new Index[0];
+    private HashMap<String, Item> storage = new HashMap<>();
 
     public void add(Item item) {
-        // Initialize a temporary storage array with a size of the current storage array + 1
-        Item[] tempStorage = new Item[storage.length + 1];
+        // Initialize a temporary indexes array with a size of the current indexes array + 1
+        Index[] tempindexes = new Index[indexes.length + 1];
 
-        // Copy the contents of the current storage array to the temporary storage array
-        // for (int i = 0; i < storage.length; i++) {
-        //     tempStorage[i] = storage[i];
+        // Copy the contents of the current indexes array to the temporary indexes array
+        // for (int i = 0; i < indexes.length; i++) {
+        //     tempindexes[i] = indexes[i];
         // }
-        System.arraycopy(storage, 0, tempStorage, 0, storage.length);
+        System.arraycopy(indexes, 0, tempindexes, 0, indexes.length);
 
+        // Create an index
+        Index index = new Index(item.getBrand(), item.getBrand());
+        storage.put(item.getBrand(), item);
 
-        // Add the new item to the temporary storage array
-        tempStorage[storage.length] = item;
+        // Add the new index to the temporary indexes array
+        tempindexes[indexes.length] = index;
 
-        // Set the current storage array to the temporary storage array
-        storage = tempStorage;
+        // Set the current indexes array to the temporary indexes array
+        indexes = tempindexes;
     }
 
     public void remove(int index) throws IndexOutOfBoundsException {
-        if (index < 0 || index >= storage.length) {
-            throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
+        if (index < 0 || index >= indexes.length) {
+            throw new IndexOutOfBoundsException("Index.java " + index + " is out of bounds");
         }
 
-        // Initialize a temporary storage array with a size of the current storage array - 1
-        Item[] tempStorage = new Item[storage.length - 1];
+        // Initialize a temporary indexes array with a size of the current indexes array - 1
+        Index[] tempindexes = new Index[indexes.length - 1];
 
-        // Copy the contents of the current storage array to the temporary storage array
-        for (int i = 0, k = 0; i < storage.length; i++) {
+        // Copy the contents of the current indexes array to the temporary indexes array
+        for (int i = 0, k = 0; i < indexes.length; i++) {
             if (i != index) {
-                tempStorage[k] = storage[i];
+                tempindexes[k] = indexes[i];
                 k++;
+            } else if (i == index) {
+                storage.remove(indexes[i].getBrand());
             }
         }
 
-        // Set the current storage array to the temporary storage array
-        storage = tempStorage;
+        // Set the current indexes array to the temporary indexes array
+        indexes = tempindexes;
     }
 
     private void merge(int left, int middle, int right) {
-        // Find the sizes of the two temporary storage arrays to be merged
+        // Find the sizes of the two temporary indexes arrays to be merged
         int leftSize = middle - left + 1;
         int rightSize = right - middle;
 
-        // Create temporary storage arrays
-        Item[] leftArray = new Item[leftSize];
-        Item[] rightArray = new Item[rightSize];
+        // Create temporary indexes arrays
+        Index[] leftArray = new Index[leftSize];
+        Index[] rightArray = new Index[rightSize];
 
-        // Copy the contents of the current storage array to the two temporary storage arrays
-        System.arraycopy(storage, left, leftArray, 0, leftSize);
-        System.arraycopy(storage, middle + 1, rightArray, 0, rightSize);
+        // Copy the contents of the current indexes array to the two temporary indexes arrays
+        System.arraycopy(indexes, left, leftArray, 0, leftSize);
+        System.arraycopy(indexes, middle + 1, rightArray, 0, rightSize);
 
-        // Initial indexes of the two temporary storage arrays
+        // Initial indexes of the two temporary indexes arrays
         int leftIndex = 0;
         int rightIndex = 0;
 
-        // Initial index of the merged storage array
-        int storageIndex = left;
+        // Initial index of the merged indexes array
+        int indexesIndex = left;
         while (leftIndex < leftSize && rightIndex < rightSize) {
             if (leftArray[leftIndex].getBrand().compareTo(rightArray[rightIndex].getBrand()) <= 0) {
-                storage[storageIndex] = leftArray[leftIndex];
+                indexes[indexesIndex] = leftArray[leftIndex];
                 leftIndex++;
             } else {
-                storage[storageIndex] = rightArray[rightIndex];
+                indexes[indexesIndex] = rightArray[rightIndex];
                 rightIndex++;
             }
-            storageIndex++;
+            indexesIndex++;
         }
 
         // Copy remaining elements of leftArray if any
         while (leftIndex < leftSize) {
-            storage[storageIndex] = leftArray[leftIndex];
+            indexes[indexesIndex] = leftArray[leftIndex];
             leftIndex++;
-            storageIndex++;
+            indexesIndex++;
         }
 
         // Copy remaining elements of rightArray if any
         while (rightIndex < rightSize) {
-            storage[storageIndex] = rightArray[rightIndex];
+            indexes[indexesIndex] = rightArray[rightIndex];
             rightIndex++;
-            storageIndex++;
+            indexesIndex++;
         }
     }
 
@@ -105,10 +113,10 @@ public class Stock {
     public int search(int left, int right, String brand) {
         if (right >= left) {
             int middle = left + (right - left) / 2;
-            if (storage[middle].getBrand().equals(brand)) {
+            if (indexes[middle].getBrand().equals(brand)) {
                 return middle;
             }
-            if (storage[middle].getBrand().compareTo(brand) > 0) {
+            if (indexes[middle].getBrand().compareTo(brand) > 0) {
                 return search(left, middle - 1, brand);
             }
             return search(middle + 1, right, brand);
@@ -116,7 +124,10 @@ public class Stock {
         return -1;
     }
 
-    public Item[] getStorage() {
+    public HashMap<String, Item> getStorage() {
         return storage;
+    }
+    public Index[] getIndexes() {
+        return indexes;
     }
 }

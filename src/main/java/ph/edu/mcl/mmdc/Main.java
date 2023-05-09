@@ -14,7 +14,7 @@ public class Main {
 
         System.out.println("=================Brands=================");
 
-        for (Item item : stock.getStorage()) {
+        for (Item item : stock.getStorage().values()) {
             System.out.println(item.getBrand());
         }
 
@@ -31,22 +31,22 @@ public class Main {
 
         System.out.println("============Brands Available============");
 
-        for (Item item : stock.getStorage()) {
+        for (Item item : stock.getStorage().values()) {
             System.out.println(item.getBrand());
         }
 
         System.out.println("=======Brands Available (Sorted)========");
 
-        stock.sort(0, stock.getStorage().length - 1);
-        for (Item item : stock.getStorage()) {
+        stock.sort(0, stock.getStorage().size() - 1);
+        for (Item item : stock.getStorage().values()) {
             System.out.println(item.getBrand());
         }
 
         System.out.println("========================================");
 
-        int itemIndex = stock.search(0, stock.getStorage().length - 1, "Kymco");
+        int itemIndex = stock.search(0, stock.getStorage().size() - 1, "Kymco");
         if (itemIndex != -1) {
-            System.out.println("Found Item: " + stock.getStorage()[itemIndex].getBrand());
+            System.out.println("Found Item: " + stock.getIndexes()[itemIndex].getBrand());
         } else {
             System.out.println("Item not found");
         }
